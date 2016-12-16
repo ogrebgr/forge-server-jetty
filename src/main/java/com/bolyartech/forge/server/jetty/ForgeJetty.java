@@ -1,5 +1,6 @@
 package com.bolyartech.forge.server.jetty;
 
+import com.bolyartech.forge.server.config.ForgeConfigurationException;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
@@ -11,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServlet;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
 abstract public class ForgeJetty {
@@ -38,7 +38,7 @@ abstract public class ForgeJetty {
             context.getSessionHandler().getSessionManager().setMaxInactiveInterval(conf.getSessionTimeout());
             context.setMaxFormContentSize(conf.getMaxFormSize());
             context.setContextPath("/");
-            context.addServlet(new ServletHolder(createMainServlet()),"/*");
+            context.addServlet(new ServletHolder(createMainServlet()), "/*");
             mServer.setHandler(context);
 
             try {
@@ -52,8 +52,7 @@ abstract public class ForgeJetty {
                     //suppress
                 }
             }
-
-        } catch (ForgeJettyConfigurationException e) {
+        } catch (ForgeConfigurationException e) {
             mLogger.error("Cannot start the server.");
         }
     }
@@ -92,8 +91,6 @@ abstract public class ForgeJetty {
         }
 
         mServer.setConnectors(mConnectors.toArray(new Connector[]{}));
-
-
     }
 
 

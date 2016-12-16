@@ -1,5 +1,6 @@
 package com.bolyartech.forge.server.jetty;
 
+import com.bolyartech.forge.server.config.ForgeConfigurationException;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
@@ -10,7 +11,7 @@ import java.util.Properties;
 public class ForgeJettyConfigurationLoaderImpl implements ForgeJettyConfigurationLoader {
     private final org.slf4j.Logger mLogger = LoggerFactory.getLogger(this.getClass());
 
-    private static final String FILENAME = "jetty.conf";
+    private static final String FILENAME = "conf/jetty.conf";
 
     private static final String PROP_HOST = "host";
     private static final String PROP_HTTP_PORT = "http_port";
@@ -25,7 +26,7 @@ public class ForgeJettyConfigurationLoaderImpl implements ForgeJettyConfiguratio
 
 
     @Override
-    public ForgeJettyConfiguration load(ClassLoader cl) throws ForgeJettyConfigurationException {
+    public ForgeJettyConfiguration load(ClassLoader cl) throws ForgeConfigurationException {
         InputStream is = cl.getResourceAsStream(FILENAME);
         if (is != null) {
             Properties prop = new Properties();
@@ -34,7 +35,7 @@ public class ForgeJettyConfigurationLoaderImpl implements ForgeJettyConfiguratio
 
             } catch (IOException e) {
                 mLogger.error("Cannot load config file");
-                throw new ForgeJettyConfigurationException(e);
+                throw new ForgeConfigurationException(e);
             }
 
             try {
@@ -50,10 +51,11 @@ public class ForgeJettyConfigurationLoaderImpl implements ForgeJettyConfiguratio
                         );
             } catch(Exception e) {
                 mLogger.error("Error populating configuration", e);
-                throw new ForgeJettyConfigurationException(e);
+                throw new ForgeConfigurationException(e);
             }
         } else {
-            return null;
+            mLogger.error("Problem  finding/loading configuration file " + FILENAME);
+            throw new ForgeConfigurationException();
         }
     }
 }

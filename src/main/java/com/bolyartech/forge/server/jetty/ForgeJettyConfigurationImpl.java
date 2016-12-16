@@ -1,6 +1,9 @@
 package com.bolyartech.forge.server.jetty;
 
 
+import com.bolyartech.forge.server.config.ForgeConfigurationException;
+
+
 public class ForgeJettyConfigurationImpl implements ForgeJettyConfiguration {
     private final String mHost;
     private final int mHttpPort;
@@ -21,11 +24,11 @@ public class ForgeJettyConfigurationImpl implements ForgeJettyConfiguration {
                                        String keyStorePath,
                                        String keyStorePassword,
                                        String trustStorePath,
-                                       String trustStorePassword) throws ForgeJettyConfigurationException {
+                                       String trustStorePassword) throws ForgeConfigurationException {
         mHost = host;
         if (httpPort > 0) {
             if (httpPort == httpsPort) {
-                throw new ForgeJettyConfigurationException("HTTP port and HTTPS ports are the same: " + httpPort);
+                throw new ForgeConfigurationException("HTTP port and HTTPS ports are the same: " + httpPort);
             }
         }
         mHttpPort = httpPort;
@@ -34,7 +37,7 @@ public class ForgeJettyConfigurationImpl implements ForgeJettyConfiguration {
         mMaxFormSize = maxFormSize;
         if (mHttpsPort > 0) {
             if (keyStorePath == null || keyStorePath.length() == 0) {
-                throw new ForgeJettyConfigurationException("https port is set but no keystore info is provided");
+                throw new ForgeConfigurationException("https port is set but no keystore info is provided");
             }
         }
         mKeyStorePath = keyStorePath;
