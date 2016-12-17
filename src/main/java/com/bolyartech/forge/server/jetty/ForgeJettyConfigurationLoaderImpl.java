@@ -17,7 +17,10 @@ public class ForgeJettyConfigurationLoaderImpl implements ForgeJettyConfiguratio
     private static final String PROP_HTTP_PORT = "http_port";
     private static final String PROP_HTTPS_PORT = "https_port";
     private static final String PROP_SESSION_TIMEOUT = "session_timeout_seconds";
-    private static final String PROP_MAX_FORM_SIZE = "max_form_size_bytes";
+    private static final String PROP_TEMPORARY_DIRECTORY = "temporary_directory";
+    private static final String PROP_MAX_REQUEST_SIZE = "max_file_upload_size_bytes";
+    private static final String PROP_MAX_FILE_UPLOAD_SIZE = "max_request_size_bytes";
+    private static final String PROP_FILE_TRESHOLD_SIZE = "file_size_threshold";
     private static final String PROP_KEYSTORE_PATH = "keystore_path";
     private static final String PROP_KEYSTORE_PASSWORD = "keystore_password";
     private static final String PROP_TRUSTSTORE_PATH = "truststore_path";
@@ -43,14 +46,17 @@ public class ForgeJettyConfigurationLoaderImpl implements ForgeJettyConfiguratio
                         Integer.parseInt(prop.getProperty(PROP_HTTP_PORT)),
                         Integer.parseInt(prop.getProperty(PROP_HTTPS_PORT)),
                         Integer.parseInt(prop.getProperty(PROP_SESSION_TIMEOUT)),
-                        Integer.parseInt(prop.getProperty(PROP_MAX_FORM_SIZE)),
+                        prop.getProperty(PROP_TEMPORARY_DIRECTORY),
+                        Integer.parseInt(prop.getProperty(PROP_MAX_REQUEST_SIZE)),
+                        Integer.parseInt(prop.getProperty(PROP_MAX_FILE_UPLOAD_SIZE)),
+                        Integer.parseInt(prop.getProperty(PROP_FILE_TRESHOLD_SIZE)),
                         prop.getProperty(PROP_KEYSTORE_PATH),
                         prop.getProperty(PROP_KEYSTORE_PASSWORD),
                         prop.getProperty(PROP_TRUSTSTORE_PATH),
                         prop.getProperty(PROP_TRUSTSTORE_PASSWORD)
                         );
             } catch(Exception e) {
-                mLogger.error("Error populating configuration", e);
+                mLogger.error("Error populating Jetty configuration", e);
                 throw new ForgeConfigurationException(e);
             }
         } else {

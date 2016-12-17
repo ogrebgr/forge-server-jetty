@@ -9,6 +9,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.HttpServlet;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +37,16 @@ abstract public class ForgeJetty {
 
             ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
             context.getSessionHandler().getSessionManager().setMaxInactiveInterval(conf.getSessionTimeout());
-            context.setMaxFormContentSize(conf.getMaxFormSize());
+            context.setMaxFormContentSize(conf.getMaxRequestSize());
             context.setContextPath("/");
-            context.addServlet(new ServletHolder(createMainServlet()), "/*");
+            ServletHolder holder = new ServletHolder(createMainServlet());
+
+            holder.getRegistration().setMultipartConfig(new MultipartConfigElement(conf.getTemporaryDirectory(),
+                    conf.getMaxFileUploadSize(),
+                    conf.getMaxRequestSize(),
+                    conf.getFileSizeThreshold()));
+            context.addServlet(holder, "/*");
+
             mServer.setHandler(context);
 
             try {

@@ -8,8 +8,11 @@ public class ForgeJettyConfigurationImpl implements ForgeJettyConfiguration {
     private final String mHost;
     private final int mHttpPort;
     private final int mHttpsPort;
+    private final String mTemporaryDirectoty;
     private final int mSessionTimeout;
-    private final int mMaxFormSize;
+    private final int mMaxRequestSizeSize;
+    private final int mMaxFileUploadSize;
+    private final int mFileSizeThreshold;
     private final String mKeyStorePath;
     private final String mKeyStorePassword;
     private final String mTrustStorePath;
@@ -20,7 +23,10 @@ public class ForgeJettyConfigurationImpl implements ForgeJettyConfiguration {
                                        int httpPort,
                                        int httpsPort,
                                        int sessionTimeout,
-                                       int maxFormSize,
+                                       String temporaryDirectoty,
+                                       int maxRequestSizeSize,
+                                       int maxFileUploadSize,
+                                       int fileSizeThreshold,
                                        String keyStorePath,
                                        String keyStorePassword,
                                        String trustStorePath,
@@ -34,7 +40,11 @@ public class ForgeJettyConfigurationImpl implements ForgeJettyConfiguration {
         mHttpPort = httpPort;
         mHttpsPort = httpsPort;
         mSessionTimeout = sessionTimeout;
-        mMaxFormSize = maxFormSize;
+        mTemporaryDirectoty = temporaryDirectoty;
+        mMaxRequestSizeSize = maxRequestSizeSize;
+        mMaxFileUploadSize = maxFileUploadSize;
+        mFileSizeThreshold = fileSizeThreshold;
+
         if (mHttpsPort > 0) {
             if (keyStorePath == null || keyStorePath.length() == 0) {
                 throw new ForgeConfigurationException("https port is set but no keystore info is provided");
@@ -81,8 +91,26 @@ public class ForgeJettyConfigurationImpl implements ForgeJettyConfiguration {
     }
 
 
-    public int getMaxFormSize() {
-        return mMaxFormSize;
+    @Override
+    public String getTemporaryDirectory() {
+        return mTemporaryDirectoty;
+    }
+
+
+    public int getMaxRequestSize() {
+        return mMaxRequestSizeSize;
+    }
+
+
+    @Override
+    public int getMaxFileUploadSize() {
+        return mMaxFileUploadSize;
+    }
+
+
+    @Override
+    public int getFileSizeThreshold() {
+        return mFileSizeThreshold;
     }
 
 

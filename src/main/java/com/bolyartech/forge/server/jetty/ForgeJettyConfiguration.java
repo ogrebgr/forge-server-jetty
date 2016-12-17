@@ -5,7 +5,10 @@ public interface ForgeJettyConfiguration {
     int getHttpPort();
     int getHttpsPort();
     int getSessionTimeout();
-    int getMaxFormSize();
+    String getTemporaryDirectory();
+    int getMaxRequestSize();
+    int getMaxFileUploadSize();
+    int getFileSizeThreshold();
     String getKeyStorePath();
     String getKeyStorePassword();
     String getTrustStorePath();
