@@ -13,4 +13,5 @@ public interface ForgeJettyConfiguration {
     String getKeyStorePassword();
     String getTrustStorePath();
     String getTrustStorePassword();
+    String getConfigDir();
 }

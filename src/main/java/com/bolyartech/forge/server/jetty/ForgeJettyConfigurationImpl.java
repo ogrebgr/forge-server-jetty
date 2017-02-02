@@ -3,6 +3,8 @@ package com.bolyartech.forge.server.jetty;
 
 import com.bolyartech.forge.server.config.ForgeConfigurationException;
 
+import java.util.Properties;
+
 
 public class ForgeJettyConfigurationImpl implements ForgeJettyConfiguration {
     private final String mHost;
@@ -17,6 +19,7 @@ public class ForgeJettyConfigurationImpl implements ForgeJettyConfiguration {
     private final String mKeyStorePassword;
     private final String mTrustStorePath;
     private final String mTrustStorePassword;
+    private final String mConfigDir;
 
 
     public ForgeJettyConfigurationImpl(String host,
@@ -30,7 +33,8 @@ public class ForgeJettyConfigurationImpl implements ForgeJettyConfiguration {
                                        String keyStorePath,
                                        String keyStorePassword,
                                        String trustStorePath,
-                                       String trustStorePassword) throws ForgeConfigurationException {
+                                       String trustStorePassword,
+                                       String configDir) throws ForgeConfigurationException {
         mHost = host;
         if (httpPort > 0) {
             if (httpPort == httpsPort) {
@@ -54,6 +58,7 @@ public class ForgeJettyConfigurationImpl implements ForgeJettyConfiguration {
         mKeyStorePassword = keyStorePassword;
         mTrustStorePath = trustStorePath;
         mTrustStorePassword = trustStorePassword;
+        mConfigDir = configDir;
     }
 
 
@@ -123,5 +128,11 @@ public class ForgeJettyConfigurationImpl implements ForgeJettyConfiguration {
     @Override
     public String getTrustStorePassword() {
         return mTrustStorePassword;
+    }
+
+
+    @Override
+    public String getConfigDir() {
+        return mConfigDir;
     }
 }

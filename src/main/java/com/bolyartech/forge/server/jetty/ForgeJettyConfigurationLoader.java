@@ -4,4 +4,4 @@ import com.bolyartech.forge.server.config.ForgeConfigurationException;
 
 
 public interface ForgeJettyConfigurationLoader {
-    ForgeJettyConfiguration load(ClassLoader cl) throws ForgeConfigurationException;}
+    ForgeJettyConfiguration load() throws ForgeConfigurationException;}

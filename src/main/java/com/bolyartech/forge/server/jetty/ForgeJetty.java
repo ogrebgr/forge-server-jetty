@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.HttpServlet;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,7 @@ abstract public class ForgeJetty {
 
     public void start() {
         try {
-            ForgeJettyConfiguration conf = mForgeJettyConfigurationLoader.load(this.getClass().getClassLoader());
+            ForgeJettyConfiguration conf = mForgeJettyConfigurationLoader.load();
 
             mServer = new Server();
             setConnectors(mServer, conf);
@@ -78,6 +79,11 @@ abstract public class ForgeJetty {
         }
 
         if (conf.getHttpsPort() > 0) {
+            File f = new File(conf.getKeyStorePath());
+            if (!f.exists()) {
+                mLogger.error("Cannot find SSL keystore file at: " + conf.getKeyStorePath());
+                throw new IllegalStateException("Cannot find SSL keystore file at: " + conf.getKeyStorePath());
+            }
             SslContextFactory sslContextFactory = new SslContextFactory(conf.getKeyStorePath());
 
             if (conf.getKeyStorePassword() != null) {
