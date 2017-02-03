@@ -1,6 +1,5 @@
 package com.bolyartech.forge.server.jetty;
 
-import com.bolyartech.forge.server.config.ForgeConfigurationException;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
@@ -18,51 +17,45 @@ import java.util.List;
 
 abstract public class ForgeJetty {
     private final org.slf4j.Logger mLogger = LoggerFactory.getLogger(this.getClass());
-    private final ForgeJettyConfigurationLoader mForgeJettyConfigurationLoader;
+    private final ForgeJettyConfiguration mForgeJettyConfiguration;
 
     private Server mServer;
 
 
-    public ForgeJetty(ForgeJettyConfigurationLoader forgeJettyConfigurationLoader) {
-        mForgeJettyConfigurationLoader = forgeJettyConfigurationLoader;
+    public ForgeJetty(ForgeJettyConfiguration conf) {
+        mForgeJettyConfiguration = conf;
     }
 
 
     public void start() {
+        mServer = new Server();
+        setConnectors(mServer, mForgeJettyConfiguration);
+
+
+        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        context.getSessionHandler().getSessionManager().setMaxInactiveInterval(mForgeJettyConfiguration.getSessionTimeout());
+        context.setMaxFormContentSize(mForgeJettyConfiguration.getMaxRequestSize());
+        context.setContextPath("/");
+        ServletHolder holder = new ServletHolder(createMainServlet(mForgeJettyConfiguration.getConfigDir()));
+
+        holder.getRegistration().setMultipartConfig(new MultipartConfigElement(mForgeJettyConfiguration.getTemporaryDirectory(),
+                mForgeJettyConfiguration.getMaxFileUploadSize(),
+                mForgeJettyConfiguration.getMaxRequestSize(),
+                mForgeJettyConfiguration.getFileSizeThreshold()));
+        context.addServlet(holder, "/*");
+
+        mServer.setHandler(context);
+
         try {
-            ForgeJettyConfiguration conf = mForgeJettyConfigurationLoader.load();
-
-            mServer = new Server();
-            setConnectors(mServer, conf);
-
-
-            ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-            context.getSessionHandler().getSessionManager().setMaxInactiveInterval(conf.getSessionTimeout());
-            context.setMaxFormContentSize(conf.getMaxRequestSize());
-            context.setContextPath("/");
-            ServletHolder holder = new ServletHolder(createMainServlet());
-
-            holder.getRegistration().setMultipartConfig(new MultipartConfigElement(conf.getTemporaryDirectory(),
-                    conf.getMaxFileUploadSize(),
-                    conf.getMaxRequestSize(),
-                    conf.getFileSizeThreshold()));
-            context.addServlet(holder, "/*");
-
-            mServer.setHandler(context);
-
+            mServer.start();
+            mServer.join();
+        } catch (Exception e) {
+            mLogger.error("Error starting the server: ", e);
             try {
-                mServer.start();
-                mServer.join();
-            } catch (Exception e) {
-                mLogger.error("Error starting the server: ", e);
-                try {
-                    mServer.stop();
-                } catch (Exception e1) {
-                    //suppress
-                }
+                mServer.stop();
+            } catch (Exception e1) {
+                //suppress
             }
-        } catch (ForgeConfigurationException e) {
-            mLogger.error("Cannot start the server.");
         }
     }
 
@@ -118,7 +111,8 @@ abstract public class ForgeJetty {
         }
     }
 
-    abstract public HttpServlet createMainServlet();
+
+    abstract public HttpServlet createMainServlet(String configDir);
 
 
 }
