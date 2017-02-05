@@ -20,6 +20,7 @@ public class ConfigurationPropertiesHelper {
     private static final String PROP_TRUSTSTORE_PASSWORD = "truststore_password";
     private static final String PROP_CONFIG_DIR = "config_dir";
 
+
     public static ForgeJettyConfigurationImpl fromProperties(Properties prop) throws ForgeConfigurationException {
         return new ForgeJettyConfigurationImpl(prop.getProperty(PROP_HOST),
                 Integer.parseInt(prop.getProperty(PROP_HTTP_PORT)),

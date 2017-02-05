@@ -9,11 +9,10 @@ import java.util.Properties;
 
 
 public class ForgeJettyConfigurationLoaderClasspath implements ForgeJettyConfigurationLoader {
+    private static final String FILENAME = "conf/jetty.conf";
     private final org.slf4j.Logger mLogger = LoggerFactory.getLogger(this.getClass());
-
     private final ClassLoader mClassLoader;
 
-    private static final String FILENAME = "conf/jetty.conf";
 
     public ForgeJettyConfigurationLoaderClasspath(ClassLoader classLoader) {
         mClassLoader = classLoader;
@@ -34,7 +33,7 @@ public class ForgeJettyConfigurationLoaderClasspath implements ForgeJettyConfigu
 
             try {
                 return ConfigurationPropertiesHelper.fromProperties(prop);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 mLogger.error("Error populating Jetty configuration", e);
                 throw new ForgeConfigurationException(e);
             }

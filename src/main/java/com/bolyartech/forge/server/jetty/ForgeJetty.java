@@ -60,6 +60,20 @@ abstract public class ForgeJetty {
     }
 
 
+    public void stop() {
+        if (mServer != null) {
+            try {
+                mServer.stop();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    abstract public HttpServlet createMainServlet(String configDir);
+
+
     private void setConnectors(Server server, ForgeJettyConfiguration conf) {
 
         List<Connector> mConnectors = new ArrayList<>();
@@ -99,20 +113,6 @@ abstract public class ForgeJetty {
 
         mServer.setConnectors(mConnectors.toArray(new Connector[]{}));
     }
-
-
-    public void stop() {
-        if (mServer != null) {
-            try {
-                mServer.stop();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-
-    abstract public HttpServlet createMainServlet(String configDir);
 
 
 }

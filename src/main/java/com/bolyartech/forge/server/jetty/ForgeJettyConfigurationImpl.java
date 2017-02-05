@@ -3,8 +3,6 @@ package com.bolyartech.forge.server.jetty;
 
 import com.bolyartech.forge.server.config.ForgeConfigurationException;
 
-import java.util.Properties;
-
 
 public class ForgeJettyConfigurationImpl implements ForgeJettyConfiguration {
     private final String mHost;
