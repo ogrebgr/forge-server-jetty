@@ -13,9 +13,9 @@ import java.util.Properties;
 
 
 public class ForgeJettyConfigurationLoaderFile implements ForgeJettyConfigurationLoader {
-    public static final String SYSTEM_PROPERTY_JETTY_CONF_FILE = "jetty_config_file";
-    public static final String JETTY_CONF_FILE = "jetty.conf";
-    public static final String CONF_DIR = "conf";
+    private static final String SYSTEM_PROPERTY_JETTY_CONF_FILE = "jetty_config_file";
+    private static final String JETTY_CONF_FILE = "jetty.conf";
+    private static final String CONF_DIR = "conf";
     private static final org.slf4j.Logger mLogger = LoggerFactory.getLogger(ForgeJettyConfigurationLoaderFile.class);
     private final String mConfigFilePath;
 
