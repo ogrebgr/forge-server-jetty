@@ -15,15 +15,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-abstract public class ForgeJetty {
+public class ForgeJetty {
     private final org.slf4j.Logger mLogger = LoggerFactory.getLogger(this.getClass());
     private final ForgeJettyConfiguration mForgeJettyConfiguration;
 
     private Server mServer;
+    private HttpServlet mMainServlet;
 
 
-    public ForgeJetty(ForgeJettyConfiguration conf) {
+    public ForgeJetty(ForgeJettyConfiguration conf, HttpServlet mainServlet) {
         mForgeJettyConfiguration = conf;
+        mMainServlet = mainServlet;
     }
 
 
@@ -36,7 +38,7 @@ abstract public class ForgeJetty {
         context.getSessionHandler().getSessionManager().setMaxInactiveInterval(mForgeJettyConfiguration.getSessionTimeout());
         context.setMaxFormContentSize(mForgeJettyConfiguration.getMaxRequestSize());
         context.setContextPath("/");
-        ServletHolder holder = new ServletHolder(createMainServlet(mForgeJettyConfiguration.getConfigDir()));
+        ServletHolder holder = new ServletHolder(mMainServlet);
 
         holder.getRegistration().setMultipartConfig(new MultipartConfigElement(mForgeJettyConfiguration.getTemporaryDirectory(),
                 mForgeJettyConfiguration.getMaxFileUploadSize(),
@@ -69,9 +71,6 @@ abstract public class ForgeJetty {
             }
         }
     }
-
-
-    abstract public HttpServlet createMainServlet(String configDir);
 
 
     private void setConnectors(Server server, ForgeJettyConfiguration conf) {
