@@ -14,6 +14,7 @@ public class ForgeJettyConfigurationLoaderClasspath implements ForgeJettyConfigu
     private final ClassLoader mClassLoader;
 
 
+    @SuppressWarnings("unused")
     public ForgeJettyConfigurationLoaderClasspath(ClassLoader classLoader) {
         mClassLoader = classLoader;
     }

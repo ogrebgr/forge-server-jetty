@@ -20,7 +20,7 @@ public class ForgeJetty {
     private final ForgeJettyConfiguration mForgeJettyConfiguration;
 
     private Server mServer;
-    private HttpServlet mMainServlet;
+    private final HttpServlet mMainServlet;
 
 
     public ForgeJetty(ForgeJettyConfiguration conf, HttpServlet mainServlet) {
@@ -29,6 +29,8 @@ public class ForgeJetty {
     }
 
 
+
+    @SuppressWarnings("unused")
     public void start() {
         mServer = new Server();
         setConnectors(mServer, mForgeJettyConfiguration);
@@ -62,6 +64,7 @@ public class ForgeJetty {
     }
 
 
+    @SuppressWarnings("unused")
     public void stop() {
         if (mServer != null) {
             try {

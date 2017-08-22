@@ -23,7 +23,9 @@ public interface ForgeJettyConfiguration {
 
     String getTrustStorePath();
 
+    @SuppressWarnings("unused")
     String getTrustStorePassword();
 
+    @SuppressWarnings("unused")
     String getConfigDir();
 }
