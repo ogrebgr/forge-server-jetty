@@ -13,7 +13,7 @@ public class ConfigurationPropertiesHelper {
     private static final String PROP_TEMPORARY_DIRECTORY = "temporary_directory";
     private static final String PROP_MAX_REQUEST_SIZE = "max_file_upload_size_bytes";
     private static final String PROP_MAX_FILE_UPLOAD_SIZE = "max_request_size_bytes";
-    private static final String PROP_FILE_TRESHOLD_SIZE = "file_size_threshold";
+    private static final String PROP_FILE_THRESHOLD_SIZE = "file_size_threshold";
     private static final String PROP_KEYSTORE_PATH = "keystore_path";
     private static final String PROP_KEYSTORE_PASSWORD = "keystore_password";
     private static final String PROP_TRUSTSTORE_PATH = "truststore_path";
@@ -29,7 +29,7 @@ public class ConfigurationPropertiesHelper {
                 prop.getProperty(PROP_TEMPORARY_DIRECTORY),
                 Integer.parseInt(prop.getProperty(PROP_MAX_REQUEST_SIZE)),
                 Integer.parseInt(prop.getProperty(PROP_MAX_FILE_UPLOAD_SIZE)),
-                Integer.parseInt(prop.getProperty(PROP_FILE_TRESHOLD_SIZE)),
+                Integer.parseInt(prop.getProperty(PROP_FILE_THRESHOLD_SIZE)),
                 prop.getProperty(PROP_KEYSTORE_PATH),
                 prop.getProperty(PROP_KEYSTORE_PASSWORD),
                 prop.getProperty(PROP_TRUSTSTORE_PATH),
