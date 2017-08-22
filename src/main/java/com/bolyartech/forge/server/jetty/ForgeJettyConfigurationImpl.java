@@ -8,7 +8,7 @@ public class ForgeJettyConfigurationImpl implements ForgeJettyConfiguration {
     private final String mHost;
     private final int mHttpPort;
     private final int mHttpsPort;
-    private final String mTemporaryDirectoty;
+    private final String mTemporaryDirectory;
     private final int mSessionTimeout;
     private final int mMaxRequestSizeSize;
     private final int mMaxFileUploadSize;
@@ -20,11 +20,12 @@ public class ForgeJettyConfigurationImpl implements ForgeJettyConfiguration {
     private final String mConfigDir;
 
 
+    @SuppressWarnings("unused")
     public ForgeJettyConfigurationImpl(String host,
                                        int httpPort,
                                        int httpsPort,
                                        int sessionTimeout,
-                                       String temporaryDirectoty,
+                                       String temporaryDirectory,
                                        int maxRequestSizeSize,
                                        int maxFileUploadSize,
                                        int fileSizeThreshold,
@@ -42,7 +43,7 @@ public class ForgeJettyConfigurationImpl implements ForgeJettyConfiguration {
         mHttpPort = httpPort;
         mHttpsPort = httpsPort;
         mSessionTimeout = sessionTimeout;
-        mTemporaryDirectoty = temporaryDirectoty;
+        mTemporaryDirectory = temporaryDirectory;
         mMaxRequestSizeSize = maxRequestSizeSize;
         mMaxFileUploadSize = maxFileUploadSize;
         mFileSizeThreshold = fileSizeThreshold;
@@ -96,7 +97,7 @@ public class ForgeJettyConfigurationImpl implements ForgeJettyConfiguration {
 
     @Override
     public String getTemporaryDirectory() {
-        return mTemporaryDirectoty;
+        return mTemporaryDirectory;
     }
 
 
