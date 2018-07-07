@@ -5,19 +5,19 @@ import com.bolyartech.forge.server.config.ForgeConfigurationException;
 
 
 public class ForgeJettyConfigurationImpl implements ForgeJettyConfiguration {
-    private final String mHost;
-    private final int mHttpPort;
-    private final int mHttpsPort;
-    private final String mTemporaryDirectory;
-    private final int mSessionTimeout;
-    private final int mMaxRequestSizeSize;
-    private final int mMaxFileUploadSize;
-    private final int mFileSizeThreshold;
-    private final String mKeyStorePath;
-    private final String mKeyStorePassword;
-    private final String mTrustStorePath;
-    private final String mTrustStorePassword;
-    private final String mConfigDir;
+    private final String host;
+    private final int httpPort;
+    private final int httpsPort;
+    private final String temporaryDirectory;
+    private final int sessionTimeout;
+    private final int maxRequestSizeSize;
+    private final int maxFileUploadSize;
+    private final int fileSizeThreshold;
+    private final String keyStorePath;
+    private final String keyStorePassword;
+    private final String trustStorePath;
+    private final String trustStorePassword;
+    private final String configDir;
 
 
     @SuppressWarnings("unused")
@@ -34,104 +34,104 @@ public class ForgeJettyConfigurationImpl implements ForgeJettyConfiguration {
                                        String trustStorePath,
                                        String trustStorePassword,
                                        String configDir) throws ForgeConfigurationException {
-        mHost = host;
+        this.host = host;
         if (httpPort > 0) {
             if (httpPort == httpsPort) {
                 throw new ForgeConfigurationException("HTTP port and HTTPS ports are the same: " + httpPort);
             }
         }
-        mHttpPort = httpPort;
-        mHttpsPort = httpsPort;
-        mSessionTimeout = sessionTimeout;
-        mTemporaryDirectory = temporaryDirectory;
-        mMaxRequestSizeSize = maxRequestSizeSize;
-        mMaxFileUploadSize = maxFileUploadSize;
-        mFileSizeThreshold = fileSizeThreshold;
+        this.httpPort = httpPort;
+        this.httpsPort = httpsPort;
+        this.sessionTimeout = sessionTimeout;
+        this.temporaryDirectory = temporaryDirectory;
+        this.maxRequestSizeSize = maxRequestSizeSize;
+        this.maxFileUploadSize = maxFileUploadSize;
+        this.fileSizeThreshold = fileSizeThreshold;
 
-        if (mHttpsPort > 0) {
+        if (this.httpsPort > 0) {
             if (keyStorePath == null || keyStorePath.length() == 0) {
                 throw new ForgeConfigurationException("https port is set but no keystore info is provided");
             }
         }
-        mKeyStorePath = keyStorePath;
-        mKeyStorePassword = keyStorePassword;
-        mTrustStorePath = trustStorePath;
-        mTrustStorePassword = trustStorePassword;
-        mConfigDir = configDir;
+        this.keyStorePath = keyStorePath;
+        this.keyStorePassword = keyStorePassword;
+        this.trustStorePath = trustStorePath;
+        this.trustStorePassword = trustStorePassword;
+        this.configDir = configDir;
     }
 
 
     @Override
     public String getHost() {
-        return mHost;
+        return host;
     }
 
 
     @Override
     public int getHttpPort() {
-        return mHttpPort;
+        return httpPort;
     }
 
 
     @Override
     public int getHttpsPort() {
-        return mHttpsPort;
+        return httpsPort;
     }
 
 
     public String getKeyStorePath() {
-        return mKeyStorePath;
+        return keyStorePath;
     }
 
 
     public String getKeyStorePassword() {
-        return mKeyStorePassword;
+        return keyStorePassword;
     }
 
 
     @Override
     public int getSessionTimeout() {
-        return mSessionTimeout;
+        return sessionTimeout;
     }
 
 
     @Override
     public String getTemporaryDirectory() {
-        return mTemporaryDirectory;
+        return temporaryDirectory;
     }
 
 
     public int getMaxRequestSize() {
-        return mMaxRequestSizeSize;
+        return maxRequestSizeSize;
     }
 
 
     @Override
     public int getMaxFileUploadSize() {
-        return mMaxFileUploadSize;
+        return maxFileUploadSize;
     }
 
 
     @Override
     public int getFileSizeThreshold() {
-        return mFileSizeThreshold;
+        return fileSizeThreshold;
     }
 
 
     @Override
     public String getTrustStorePath() {
-        return mTrustStorePath;
+        return trustStorePath;
     }
 
 
     @Override
     public String getTrustStorePassword() {
-        return mTrustStorePassword;
+        return trustStorePassword;
     }
 
 
     @Override
     public String getConfigDir() {
-        return mConfigDir;
+        return configDir;
     }
 }

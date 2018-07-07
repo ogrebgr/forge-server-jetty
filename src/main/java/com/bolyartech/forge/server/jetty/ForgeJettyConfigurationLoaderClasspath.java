@@ -10,36 +10,36 @@ import java.util.Properties;
 
 public class ForgeJettyConfigurationLoaderClasspath implements ForgeJettyConfigurationLoader {
     private static final String FILENAME = "conf/jetty.conf";
-    private final org.slf4j.Logger mLogger = LoggerFactory.getLogger(this.getClass());
-    private final ClassLoader mClassLoader;
+    private final org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final ClassLoader classLoader;
 
 
     @SuppressWarnings("unused")
     public ForgeJettyConfigurationLoaderClasspath(ClassLoader classLoader) {
-        mClassLoader = classLoader;
+        this.classLoader = classLoader;
     }
 
 
     @Override
     public ForgeJettyConfiguration load() throws ForgeConfigurationException {
-        InputStream is = mClassLoader.getResourceAsStream(FILENAME);
+        InputStream is = classLoader.getResourceAsStream(FILENAME);
         if (is != null) {
             Properties prop = new Properties();
             try {
                 prop.load(is);
             } catch (IOException e) {
-                mLogger.error("Cannot load config file", e);
+                logger.error("Cannot load config file", e);
                 throw new ForgeConfigurationException(e);
             }
 
             try {
                 return ConfigurationPropertiesHelper.fromProperties(prop);
             } catch (Exception e) {
-                mLogger.error("Error populating Jetty configuration", e);
+                logger.error("Error populating Jetty configuration", e);
                 throw new ForgeConfigurationException(e);
             }
         } else {
-            mLogger.error("Problem  finding/loading configuration file " + FILENAME);
+            logger.error("Problem  finding/loading configuration file " + FILENAME);
             throw new ForgeConfigurationException();
         }
     }

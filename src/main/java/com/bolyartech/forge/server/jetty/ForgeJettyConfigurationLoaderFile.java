@@ -13,8 +13,8 @@ public class ForgeJettyConfigurationLoaderFile implements ForgeJettyConfiguratio
     private static final String SYSTEM_PROPERTY_JETTY_CONF_FILE = "jetty_config_file";
     private static final String JETTY_CONF_FILE = "jetty.conf";
     private static final String CONF_DIR = "conf";
-    private static final org.slf4j.Logger mLogger = LoggerFactory.getLogger(ForgeJettyConfigurationLoaderFile.class);
-    private final String mConfigFilePath;
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(ForgeJettyConfigurationLoaderFile.class);
+    private final String configFilePath;
 
 
     @SuppressWarnings("unused")
@@ -23,7 +23,7 @@ public class ForgeJettyConfigurationLoaderFile implements ForgeJettyConfiguratio
             throw new NullPointerException("configFilePath is null");
         }
 
-        mConfigFilePath = configFilePath;
+        this.configFilePath = configFilePath;
     }
 
 
@@ -45,7 +45,7 @@ public class ForgeJettyConfigurationLoaderFile implements ForgeJettyConfiguratio
             configFilePath = jettyConfigFile.getAbsolutePath();
         }
 
-        mLogger.error("Cannot detect the path to jetty.conf. Please set environment variable jetty_config_file" +
+        logger.error("Cannot detect the path to jetty.conf. Please set environment variable jetty_config_file" +
                 " to point to jetty.conf");
 
 
@@ -55,7 +55,7 @@ public class ForgeJettyConfigurationLoaderFile implements ForgeJettyConfiguratio
 
     @Override
     public ForgeJettyConfiguration load() throws ForgeConfigurationException {
-        File confFile = new File(mConfigFilePath);
+        File confFile = new File(configFilePath);
         if (confFile.exists()) {
             Properties prop = new Properties();
             try {
@@ -63,11 +63,11 @@ public class ForgeJettyConfigurationLoaderFile implements ForgeJettyConfiguratio
                 prop.load(is);
                 is.close();
             } catch (IOException e) {
-                mLogger.error("Cannot load jetty config file", e);
+                logger.error("Cannot load jetty config file", e);
                 throw new ForgeConfigurationException(e);
             }
 
-            mLogger.info("Using jetty config file: {}", confFile.getAbsolutePath());
+            logger.info("Using jetty config file: {}", confFile.getAbsolutePath());
             return ConfigurationPropertiesHelper.fromProperties(prop);
         } else {
             throw new IllegalStateException(MessageFormat.format("Cannot find configuration file: {0}",

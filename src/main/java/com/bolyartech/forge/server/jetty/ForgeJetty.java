@@ -16,47 +16,47 @@ import java.util.List;
 
 
 public class ForgeJetty {
-    private final org.slf4j.Logger mLogger = LoggerFactory.getLogger(this.getClass());
-    private final ForgeJettyConfiguration mForgeJettyConfiguration;
+    private final org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final ForgeJettyConfiguration forgeJettyConfiguration;
 
-    private Server mServer;
-    private final HttpServlet mMainServlet;
+    private Server server;
+    private final HttpServlet mainServlet;
 
 
     public ForgeJetty(ForgeJettyConfiguration conf, HttpServlet mainServlet) {
-        mForgeJettyConfiguration = conf;
-        mMainServlet = mainServlet;
+        forgeJettyConfiguration = conf;
+        this.mainServlet = mainServlet;
     }
 
 
 
     @SuppressWarnings("unused")
     public void start() {
-        mServer = new Server();
-        setConnectors(mServer, mForgeJettyConfiguration);
+        server = new Server();
+        setConnectors(server, forgeJettyConfiguration);
 
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.getSessionHandler().getSessionManager().setMaxInactiveInterval(mForgeJettyConfiguration.getSessionTimeout());
-        context.setMaxFormContentSize(mForgeJettyConfiguration.getMaxRequestSize());
+        context.getSessionHandler().getSessionManager().setMaxInactiveInterval(forgeJettyConfiguration.getSessionTimeout());
+        context.setMaxFormContentSize(forgeJettyConfiguration.getMaxRequestSize());
         context.setContextPath("/");
-        ServletHolder holder = new ServletHolder(mMainServlet);
+        ServletHolder holder = new ServletHolder(mainServlet);
 
-        holder.getRegistration().setMultipartConfig(new MultipartConfigElement(mForgeJettyConfiguration.getTemporaryDirectory(),
-                mForgeJettyConfiguration.getMaxFileUploadSize(),
-                mForgeJettyConfiguration.getMaxRequestSize(),
-                mForgeJettyConfiguration.getFileSizeThreshold()));
+        holder.getRegistration().setMultipartConfig(new MultipartConfigElement(forgeJettyConfiguration.getTemporaryDirectory(),
+                forgeJettyConfiguration.getMaxFileUploadSize(),
+                forgeJettyConfiguration.getMaxRequestSize(),
+                forgeJettyConfiguration.getFileSizeThreshold()));
         context.addServlet(holder, "/*");
 
-        mServer.setHandler(context);
+        server.setHandler(context);
 
         try {
-            mServer.start();
-            mServer.join();
+            server.start();
+            server.join();
         } catch (Exception e) {
-            mLogger.error("Error starting the server: ", e);
+            logger.error("Error starting the server: ", e);
             try {
-                mServer.stop();
+                server.stop();
             } catch (Exception e1) {
                 //suppress
             }
@@ -66,9 +66,9 @@ public class ForgeJetty {
 
     @SuppressWarnings("unused")
     public void stop() {
-        if (mServer != null) {
+        if (server != null) {
             try {
-                mServer.stop();
+                server.stop();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -81,7 +81,7 @@ public class ForgeJetty {
         List<Connector> mConnectors = new ArrayList<>();
 
         if (conf.getHttpPort() > 0) {
-            ServerConnector connector = new ServerConnector(mServer);
+            ServerConnector connector = new ServerConnector(this.server);
             connector.setHost(conf.getHost());
             connector.setPort(conf.getHttpPort());
             mConnectors.add(connector);
@@ -90,7 +90,7 @@ public class ForgeJetty {
         if (conf.getHttpsPort() > 0) {
             File f = new File(conf.getKeyStorePath());
             if (!f.exists()) {
-                mLogger.error("Cannot find SSL keystore file at: " + conf.getKeyStorePath());
+                logger.error("Cannot find SSL keystore file at: " + conf.getKeyStorePath());
                 throw new IllegalStateException("Cannot find SSL keystore file at: " + conf.getKeyStorePath());
             }
             SslContextFactory sslContextFactory = new SslContextFactory(conf.getKeyStorePath());
@@ -113,7 +113,7 @@ public class ForgeJetty {
             mConnectors.add(connector);
         }
 
-        mServer.setConnectors(mConnectors.toArray(new Connector[]{}));
+        this.server.setConnectors(mConnectors.toArray(new Connector[]{}));
     }
 
 
