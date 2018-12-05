@@ -45,7 +45,7 @@ public class ForgeJettyConfigurationLoaderFile implements ForgeJettyConfiguratio
             configFilePath = jettyConfigFile.getAbsolutePath();
         }
 
-        logger.error("Cannot detect the path to jetty.conf. Please set environment variable jetty_config_file" +
+        logger.error("Path to jetty.conf not set. Please set environment variable jetty_config_file" +
                 " to point to jetty.conf");
 
 
