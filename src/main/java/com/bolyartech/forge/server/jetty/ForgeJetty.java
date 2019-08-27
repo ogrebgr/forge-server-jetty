@@ -37,7 +37,7 @@ public class ForgeJetty {
 
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.getSessionHandler().getSessionManager().setMaxInactiveInterval(forgeJettyConfiguration.getSessionTimeout());
+        context.getSessionHandler().setMaxInactiveInterval(forgeJettyConfiguration.getSessionTimeout());
         context.setMaxFormContentSize(forgeJettyConfiguration.getMaxRequestSize());
         context.setContextPath("/");
         ServletHolder holder = new ServletHolder(mainServlet);
@@ -93,8 +93,8 @@ public class ForgeJetty {
                 logger.error("Cannot find SSL keystore file at: " + conf.getKeyStorePath());
                 throw new IllegalStateException("Cannot find SSL keystore file at: " + conf.getKeyStorePath());
             }
-            SslContextFactory sslContextFactory = new SslContextFactory(conf.getKeyStorePath());
-
+            SslContextFactory sslContextFactory = new SslContextFactory.Server();
+            sslContextFactory.setKeyStorePath(conf.getKeyStorePath());
             if (conf.getKeyStorePassword() != null) {
                 sslContextFactory.setKeyStorePassword(conf.getKeyStorePassword());
             }
