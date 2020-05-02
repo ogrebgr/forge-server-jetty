@@ -3,6 +3,7 @@ package com.bolyartech.forge.server.jetty;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.server.session.SessionDataStoreFactory;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
@@ -21,13 +22,21 @@ public class ForgeJetty {
 
     private Server server;
     private final HttpServlet mainServlet;
+    private final SessionDataStoreFactory sessionDataStoreFactory;
 
 
     public ForgeJetty(ForgeJettyConfiguration conf, HttpServlet mainServlet) {
         forgeJettyConfiguration = conf;
         this.mainServlet = mainServlet;
+        sessionDataStoreFactory = null;
     }
 
+
+    public ForgeJetty(ForgeJettyConfiguration forgeJettyConfiguration, HttpServlet mainServlet, SessionDataStoreFactory sessionDataStoreFactory) {
+        this.forgeJettyConfiguration = forgeJettyConfiguration;
+        this.mainServlet = mainServlet;
+        this.sessionDataStoreFactory = sessionDataStoreFactory;
+    }
 
 
     @SuppressWarnings("unused")
@@ -35,6 +44,9 @@ public class ForgeJetty {
         server = new Server();
         setConnectors(server, forgeJettyConfiguration);
 
+        if (sessionDataStoreFactory != null) {
+            server.addBean(sessionDataStoreFactory);
+        }
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.getSessionHandler().setMaxInactiveInterval(forgeJettyConfiguration.getSessionTimeout());
