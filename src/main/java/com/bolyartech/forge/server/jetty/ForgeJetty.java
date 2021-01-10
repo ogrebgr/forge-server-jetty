@@ -105,7 +105,7 @@ public class ForgeJetty {
                 logger.error("Cannot find SSL keystore file at: " + conf.getKeyStorePath());
                 throw new IllegalStateException("Cannot find SSL keystore file at: " + conf.getKeyStorePath());
             }
-            SslContextFactory sslContextFactory = new SslContextFactory.Server();
+            SslContextFactory.Server sslContextFactory = new SslContextFactory.Server();
             sslContextFactory.setKeyStorePath(conf.getKeyStorePath());
             if (conf.getKeyStorePassword() != null) {
                 sslContextFactory.setKeyStorePassword(conf.getKeyStorePassword());
