@@ -6,8 +6,9 @@ group 'com.bolyartech.forge.server'
 version forge_server_jetty_version
 
 apply plugin: 'java-library'
+apply plugin: 'maven'
 apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.bintray'
+apply plugin: 'signing'
 
 sourceCompatibility = 1.8
 
@@ -23,9 +24,6 @@ buildscript {
         mavenCentral()
         mavenLocal()
     }
-    dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
-    }
 }
 
 dependencies {
@@ -35,17 +33,26 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
 
-// custom tasks for creating source/javadoc jars
-task sourcesJar(type: Jar, dependsOn: classes) {
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
     classifier = 'sources'
     from sourceSets.main.allSource
 }
 
 artifacts {
-    archives sourcesJar//, javadocJar
+    archives javadocJar, sourcesJar
 }
 
-apply from: 'bintray-config.gradle'
+
+signing {
+    sign configurations.archives
+}
+
 
 publishing {
     publications {
@@ -60,21 +67,50 @@ publishing {
 }
 
 
-bintray {
-    configurations = ['archives']
-    pkg {
-        repo = 'maven'
-        name = 'forge-server-jetty'
-        userOrg = 'ogibankov'
-        licenses = ['Apache-2.0']
-        websiteUrl = 'https://github.com/ogrebgr/forge-server-jetty'
-        issueTrackerUrl = 'https://github.com/ogrebgr/forge-server-jetty/issues'
-        vcsUrl = 'git@github.com:ogrebgr/forge-server-jetty.git'
-        version {
-            name = forge_server_jetty_version
-            desc = 'Forge Server Jetty'
-            vcsTag = 'v' + forge_server_jetty_version
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://s01.oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'Forge Server Jetty'
+                packaging 'jar'
+                // optionally artifactId can be defined here
+                description 'Jetty implementation of Forge Server'
+                url 'https://github.com/ogrebgr/forge-server-jetty'
+
+                scm {
+                    connection 'scm:git:https://github.com/ogrebgr/forge-server-jetty.git'
+                    developerConnection 'scm:git:https://github.com/ogrebgr/forge-server-jetty.git'
+                    url 'https://github.com/ogrebgr/forge-server-jetty'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'ogremir'
+                        name 'Ognyan Bankov'
+                        email 'bankov@bolyartech.com'
+                    }
+                }
+            }
         }
     }
-    publications = ['MyPublication']
 }
+
+
+archivesBaseName = "forge-server-jetty"
