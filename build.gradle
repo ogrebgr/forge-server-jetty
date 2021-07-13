@@ -1,5 +1,5 @@
 ext {
-    forge_server_jetty_version = '9.1.5'
+    forge_server_jetty_version = '9.2.0'
 }
 
 group 'com.bolyartech.forge.server'
@@ -27,7 +27,7 @@ buildscript {
 
 dependencies {
 //    compile project(':forge-server')
-    api 'com.bolyartech.forge:forge-server:8.1.5'
+    api 'com.bolyartech.forge:forge-server:8.2.0'
     compile group: 'org.eclipse.jetty', name: 'jetty-webapp', version: '10.0.0'
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
