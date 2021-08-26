@@ -53,6 +53,7 @@ public class ForgeJetty {
         context.setMaxFormContentSize(forgeJettyConfiguration.getMaxRequestSize());
         context.setContextPath("/");
         ServletHolder holder = new ServletHolder(mainServlet);
+        logger.info("Session timeout: {} seconds", forgeJettyConfiguration.getSessionTimeout());
 
         holder.getRegistration().setMultipartConfig(new MultipartConfigElement(forgeJettyConfiguration.getTemporaryDirectory(),
                 forgeJettyConfiguration.getMaxFileUploadSize(),
@@ -97,6 +98,7 @@ public class ForgeJetty {
             connector.setHost(conf.getHost());
             connector.setPort(conf.getHttpPort());
             mConnectors.add(connector);
+            logger.info("Listening HTTP on {}, port {}", conf.getHost(), conf.getHttpPort());
         }
 
         if (conf.getHttpsPort() > 0) {
@@ -123,6 +125,7 @@ public class ForgeJetty {
             connector.setHost(conf.getHost());
             connector.setPort(conf.getHttpsPort());
             mConnectors.add(connector);
+            logger.info("Listening HTTPS on {}, port {}", conf.getHost(), conf.getHttpPort());
         }
 
         this.server.setConnectors(mConnectors.toArray(new Connector[]{}));
