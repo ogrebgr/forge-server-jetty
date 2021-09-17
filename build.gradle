@@ -1,5 +1,5 @@
 ext {
-    forge_server_jetty_version = '10.0.0'
+    forge_server_jetty_version = '10.0.1'
 }
 
 group 'com.bolyartech.forge.server'
