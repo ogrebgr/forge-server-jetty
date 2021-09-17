@@ -125,7 +125,7 @@ public class ForgeJetty {
             connector.setHost(conf.getHost());
             connector.setPort(conf.getHttpsPort());
             mConnectors.add(connector);
-            logger.info("Listening HTTPS on {}, port {}", conf.getHost(), conf.getHttpPort());
+            logger.info("Listening HTTPS on {}, port {}", conf.getHost(), conf.getHttpsPort());
         }
 
         this.server.setConnectors(mConnectors.toArray(new Connector[]{}));
