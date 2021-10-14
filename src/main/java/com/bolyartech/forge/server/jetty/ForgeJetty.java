@@ -1,5 +1,7 @@
 package com.bolyartech.forge.server.jetty;
 
+import jakarta.servlet.MultipartConfigElement;
+import jakarta.servlet.http.HttpServlet;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
@@ -9,8 +11,6 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.MultipartConfigElement;
-import javax.servlet.http.HttpServlet;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +19,9 @@ import java.util.List;
 public class ForgeJetty {
     private final org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
     private final ForgeJettyConfiguration forgeJettyConfiguration;
-
-    private Server server;
     private final HttpServlet mainServlet;
     private final SessionDataStoreFactory sessionDataStoreFactory;
+    private Server server;
 
 
     public ForgeJetty(ForgeJettyConfiguration conf, HttpServlet mainServlet) {
