@@ -1,12 +1,17 @@
+plugins {
+    id 'java-library'
+    id 'org.jetbrains.kotlin.jvm' version '1.7.10'
+}
+
+
 ext {
-    forge_server_jetty_version = '12.1.0'
+    forge_server_jetty_version = '13.0.0'
 }
 
 group 'com.bolyartech.forge.server'
 version forge_server_jetty_version
 
 apply plugin: 'java-library'
-apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
@@ -17,18 +22,12 @@ repositories {
     mavenLocal()
 }
 
-buildscript {
-    repositories {
-        mavenCentral()
-        mavenLocal()
-    }
-}
 
 dependencies {
 //    compile project(':forge-server')
-    api 'com.bolyartech.forge:forge-server:12.1.0'
-    compile group: 'org.eclipse.jetty', name: 'jetty-webapp', version: '11.0.7'
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+    api 'com.bolyartech.forge:forge-server:13.0.0'
+    implementation group: 'org.eclipse.jetty', name: 'jetty-webapp', version: '11.0.7'
+    testImplementation group: 'junit', name: 'junit', version: '4.11'
 }
 
 tasks.withType(Javadoc).all {
@@ -58,61 +57,59 @@ signing {
 
 publishing {
     publications {
-        MyPublication(MavenPublication) {
+        mavenJava(MavenPublication) {
             from components.java
             groupId 'com.bolyartech.forge.server'
             artifactId 'forge-server-jetty'
             version forge_server_jetty_version
             artifact sourcesJar
-        }
-    }
-}
+            artifact javadocJar
 
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-            repository(url: "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
-            }
-
-            snapshotRepository(url: "https://s01.oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
-            }
-
-            pom.project {
-                name 'Forge Server Jetty'
-                packaging 'jar'
+            pom {
+                name = 'Forge Server Jetty'
+                packaging = 'jar'
                 // optionally artifactId can be defined here
-                description 'Jetty implementation of Forge Server'
-                url 'https://github.com/ogrebgr/forge-server-jetty'
+                description = 'Jetty implementation of Forge Server'
+                url = 'https://github.com/ogrebgr/forge-server-jetty'
 
                 scm {
-                    connection 'scm:git:https://github.com/ogrebgr/forge-server-jetty.git'
-                    developerConnection 'scm:git:https://github.com/ogrebgr/forge-server-jetty.git'
-                    url 'https://github.com/ogrebgr/forge-server-jetty'
+                    connection = 'scm:git:https://github.com/ogrebgr/forge-server-jetty.git'
+                    developerConnection = 'scm:git:https://github.com/ogrebgr/forge-server-jetty.git'
+                    url = 'https://github.com/ogrebgr/forge-server-jetty'
                 }
 
                 licenses {
                     license {
-                        name 'The Apache License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
                     }
                 }
 
                 developers {
                     developer {
-                        id 'ogremir'
-                        name 'Ognyan Bankov'
-                        email 'bankov@bolyartech.com'
+                        id = 'ogremir'
+                        name = 'Ognyan Bankov'
+                        email = 'bankov@bolyartech.com'
                     }
                 }
             }
         }
     }
+
+    repositories {
+        maven {
+            name = "ossrh"
+            url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            credentials {
+                username = findProperty('ossrhUsername')
+                password = findProperty('ossrhPassword')
+            }
+        }
+    }
 }
 
+signing {
+    sign publishing.publications.mavenJava
+}
 
 archivesBaseName = "forge-server-jetty"
