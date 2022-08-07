@@ -112,4 +112,5 @@ signing {
     sign publishing.publications.mavenJava
 }
 
+
 archivesBaseName = "forge-server-jetty"
