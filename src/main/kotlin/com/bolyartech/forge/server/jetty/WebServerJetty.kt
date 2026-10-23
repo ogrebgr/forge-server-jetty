@@ -219,7 +219,7 @@ class WebServerJetty(
     }
 
     override fun getReadyThreads(): Int {
-        return 0
+        return threadPool?.idleThreads ?: -1
     }
 
     override fun getUtilizationRate(): Double {
