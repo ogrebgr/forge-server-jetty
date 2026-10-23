@@ -135,6 +135,7 @@ class WebServerJetty(
                 logger.error("Error stopping the server: ", e)
                 //suppress
             }
+            this.server = null
             false
         }
 
@@ -156,7 +157,7 @@ class WebServerJetty(
     private fun setConnectors(server: Server, conf: ForgeJettyConfiguration) {
         val connectors: MutableList<Connector> = ArrayList()
         if (conf.httpPort > 0) {
-            val connector = ServerConnector(this.server)
+            val connector = ServerConnector(server)
             connector.host = conf.host
             connector.port = conf.httpPort
             connectors.add(connector)
@@ -183,8 +184,7 @@ class WebServerJetty(
             logger.info("Accepting for hostname: $name")
         }
 
-
-        this.server!!.connectors = connectors.toTypedArray()
+        server.connectors = connectors.toTypedArray()
     }
 
     companion object {
