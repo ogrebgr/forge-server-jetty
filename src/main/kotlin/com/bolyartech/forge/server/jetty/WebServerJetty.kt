@@ -107,9 +107,9 @@ class WebServerJetty(
             val crossOriginHandler = CrossOriginHandler()
             crossOriginHandler.allowedOriginPatterns =
                 forgeConfig.forgeServerConfiguration.accessControlAllowOrigin!!.split(",").map { it.trim() }.toSet()
-            if (!forgeConfig.forgeServerConfiguration.accessControlAllowOrigin.isNullOrEmpty()) {
+            if (!forgeConfig.forgeServerConfiguration.accessControlAllowHeaders.isNullOrEmpty()) {
                 crossOriginHandler.allowedHeaders =
-                    forgeConfig.forgeServerConfiguration.accessControlAllowOrigin!!.split(",").map { it.trim() }.toSet()
+                    forgeConfig.forgeServerConfiguration.accessControlAllowHeaders!!.split(",").map { it.trim() }.toSet()
             }
             if (!forgeConfig.forgeServerConfiguration.accessControlAllowMethods.isNullOrEmpty()) {
                 crossOriginHandler.allowedMethods =
