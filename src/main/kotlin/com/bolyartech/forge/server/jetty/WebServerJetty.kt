@@ -198,9 +198,11 @@ class WebServerJetty(
                 tableData.catalogName = it.catalog
                 sessionDataStoreFactoryVal.setSessionTableSchema(tableData)
 
-                val sql = "SELECT * FROM jettysessions"
-                val ps = it.prepareStatement(sql)
-                ps.execute()
+                // checking if table exists
+                val sql = "SELECT * FROM jettysessions LIMIT 1"
+                it.prepareStatement(sql).use { ps ->
+                    ps.execute()
+                }
             }
             sessionDataStoreFactoryVal.setDatabaseAdaptor(dba)
 
